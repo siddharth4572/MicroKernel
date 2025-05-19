@@ -1,115 +1,75 @@
 # 🧠 Minimal Microkernel OS
 
-A lightweight educational microkernel operating system built from scratch. This project demonstrates core OS features such as process scheduling, inter-process communication (IPC), memory paging, and low-level hardware interrupt handling — all running in QEMU.
+A minimal operating system kernel built entirely from scratch using Assembly and C. This project serves as a foundational step toward understanding how low-level systems interact with hardware, memory management, interrupts, and bootloaders.
 
----
+Features
+Multiboot-compliant boot via GRUB
 
-## 🚀 Features
+VGA text mode terminal output
 
-- **Custom Bootloader**
-  - Sets up protected mode
-  - Loads kernel from disk and transfers control
+Basic input/output handling
 
-- **Kernel Core**
-  - Written in C with some assembly
-  - Initializes memory, timers, and interrupt descriptors
+Initial Global Descriptor Table (GDT) and Interrupt Descriptor Table (IDT) setup
 
-- **Process Scheduler**
-  - Round-Robin Scheduler
-  - Supports multitasking
+Simple memory and interrupt management
 
-- **Memory Management**
-  - Paging support (basic page table setup)
-  - Kernel heap space
+Low-level stack and time handling
 
-- **Inter-Process Communication (IPC)**
-  - Message passing between processes
+# Directory Structure
 
-- **Hardware Interrupts**
-  - Programmable interrupt controller (PIC) setup
-  - Timer interrupt handling
-  - Keyboard interrupt support
+MicroKernel/
+├── includes/             # Header files for kernel modules
+├── isodir/               # ISO boot image structure
+│   └── boot/
+│       └── grub/         # GRUB configuration
+├── srcs/                 # Source files for kernel (C and Assembly)
+│   └── boot/             # Bootloader and initial Assembly code
+├── Makefile              # Build system
+├── linker.ld             # Linker script
+├── .gitignore
+└── gcc-13.1.0.tar.gz     # GCC source archive (optional)
 
----
+# Getting Started
 
-## 🗂️ Directory Structure
+Prerequisites
+You need the following tools installed:
 
-```
-microkernel/
-├── Makefile               # Build script
-├── qemu.log               # Output log from QEMU
-├── include/               # Header files
-│   ├── io.h               # Port I/O operations
-│   ├── scheduler.h        # Process scheduler interface
-│   ├── idt.h              # Interrupt Descriptor Table
-│   ├── isr.h              # Interrupt Service Routines
-│   ├── ipc.h              # Message passing IPC
-│   ├── memory.h           # Memory paging functions
-│   ├── timer.h            # Timer configuration
-│   └── kernel.h           # Kernel initialization
-└── src/                   # (Assumed) Source implementation files
-```
-
----
-
-## 🛠️ How to Build & Run
-
-### 🔧 Requirements
-
-- `gcc`, `make`
-- `nasm`
-- `qemu-system-x86_64`
-- Linux-based OS or WSL (for best compatibility)
-
-### 🔨 Build
-
-```bash
-cd microkernel
 make
-```
 
-This compiles the kernel and prepares the image for emulation.
+gcc (preferably cross-compiler targeting i386)
 
-### ▶️ Run in QEMU
+nasm
 
-```bash
+qemu (or another emulator)
+
+Build Instructions
+To compile the kernel and create a bootable ISO:
+
+bash
+Copy
+Edit
+make
+To run the kernel using QEMU:
+
+bash
+Copy
+Edit
 make run
-```
+To clean the build artifacts:
 
-Or manually:
+bash
+Copy
+Edit
+make clean
+File Descriptions
+Makefile: Automates compilation, linking, ISO creation, and QEMU execution.
 
-```bash
-qemu-system-x86_64 -kernel build/kernel.bin
-```
+linker.ld: Custom linker script used to control memory layout of the final kernel binary.
 
----
+grub.cfg: GRUB bootloader configuration for launching the kernel.
 
-## 🧪 How It Works
+boot.s: The entry point written in Assembly which sets up the initial execution context.
 
-1. **Bootloader** (in assembly) is the first code executed.
-   - Switches to 32-bit protected mode.
-   - Loads the kernel binary from disk and jumps to the kernel entry point.
-
-2. **Kernel Initialization** (in `kernel.c` and `kernel.h`)
-   - Sets up the stack, interrupt table (IDT), and memory paging.
-   - Initializes basic hardware like the programmable interval timer (PIT) and keyboard.
-
-3. **Interrupts and ISRs**
-   - The system uses IRQs for timer and keyboard.
-   - Custom handlers are defined in `isr.c` and `idt.c`.
-
-4. **Scheduler**
-   - Implements a Round-Robin algorithm.
-   - Periodically switches between tasks using a timer interrupt.
-
-5. **IPC (Inter-process Communication)**
-   - Tasks can send/receive messages using message queues or shared memory.
-
-6. **Paging**
-   - Virtual memory is enabled by setting up page tables.
-   - Helps separate kernel and task memory.
-
----
 
 ## 👥 Authors
 
